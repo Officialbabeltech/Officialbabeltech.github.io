@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10091d">
+  <meta name="description" content="Babel Tech — technology services, translation, community and supportive listening.">
+  <title>Babel Tech | Technology, Translation & Connection</title>
+  <link rel="icon" href="babel-tech-logo.png" type="image/png">
+  <style>
+    :root {
+      --bg: #10091d;
+      --surface: #1b1230;
+      --surface-2: #24183d;
+      --text: #f8f4ff;
+      --muted: #c3b8d6;
+      --accent: #b88cff;
+      --accent-2: #e0c7ff;
+      --border: rgba(224,199,255,.18);
+      --success: #8de5b1;
+      --danger: #ff9caa;
+      --shadow: 0 18px 55px rgba(0,0,0,.22);
+    }
+    body.light {
+      --bg: #f7f2ff;
+      --surface: #ffffff;
+      --surface-2: #eee4ff;
+      --text: #211333;
+      --muted: #655773;
+      --accent: #7540bb;
+      --accent-2: #4f2689;
+      --border: rgba(67,37,103,.16);
+      --success: #167746;
+      --danger: #b4233b;
+      --shadow: 0 18px 55px rgba(62,35,92,.10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6; transition: background .2s, color .2s;
+    }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button, .button {
+      border: 0; cursor: pointer; border-radius: 999px; padding: .8rem 1.15rem;
+      background: var(--accent); color: #160b25; font-weight: 750;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+      gap: .5rem; transition: transform .15s, opacity .15s;
+    }
+    button:hover, .button:hover { transform: translateY(-1px); }
+    button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .button.secondary, button.secondary {
+      color: var(--text); background: transparent; border: 1px solid var(--border);
+    }
+    .button.whatsapp { background: #a6efbd; color: #092b16; }
+    .wrap { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20; backdrop-filter: blur(16px);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; font-weight: 900; letter-spacing: -.03em; }
+    .brand img { width: 42px; height: 42px; object-fit: contain; border-radius: 12px; }
+    .brand-mark { display: none; width: 42px; height: 42px; border-radius: 12px; place-items: center; background: var(--surface-2); color: var(--accent); font-weight: 900; }
+    .navlinks { display: flex; align-items: center; gap: 1rem; }
+    .navlinks a { text-decoration: none; color: var(--muted); font-size: .93rem; font-weight: 650; }
+    .navlinks a:hover { color: var(--text); }
+    .nav-actions { display: flex; align-items: center; gap: .5rem; }
+    .icon-button { padding: .65rem .8rem; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); }
+    .menu-button { display: none; }
+    .hero { padding: 5.3rem 0 4rem; overflow: hidden; position: relative; }
+    .hero::before {
+      content: ""; position: absolute; width: 390px; height: 390px; border-radius: 50%;
+      background: #9b5cff; filter: blur(130px); opacity: .19; top: -140px; right: -100px; pointer-events: none;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.25fr .75fr; align-items: center; gap: 3rem; position: relative; }
+    .eyebrow { display: inline-flex; gap: .5rem; align-items: center; padding: .38rem .75rem; border: 1px solid var(--border); background: var(--surface); border-radius: 999px; color: var(--accent-2); font-weight: 750; font-size: .85rem; }
+    h1 { font-size: clamp(2.65rem, 7vw, 5rem); line-height: 1.02; letter-spacing: -.055em; margin: 1.2rem 0; max-width: 750px; }
+    .gradient { background: linear-gradient(110deg, var(--accent), #f0d5ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { font-size: 1.12rem; color: var(--muted); max-width: 630px; }
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
+    .hero-card { background: linear-gradient(145deg, var(--surface-2), var(--surface)); border: 1px solid var(--border); border-radius: 30px; padding: 1.4rem; box-shadow: var(--shadow); transform: rotate(1deg); }
+    .hero-logo { display: grid; place-items: center; min-height: 240px; border-radius: 22px; background: radial-gradient(circle at 50% 40%, rgba(184,140,255,.25), transparent 65%); }
+    .hero-logo img { width: min(220px, 75%); height: auto; max-height: 220px; object-fit: contain; }
+    .hero-logo .fallback { display: none; font-size: 4rem; color: var(--accent); font-weight: 950; }
+    .mini-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: .6rem; margin-top: 1rem; }
+    .mini-stats div { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: .8rem .45rem; text-align: center; }
+    .mini-stats strong { display: block; font-size: 1.15rem; }
+    .mini-stats span { color: var(--muted); font-size: .75rem; }
+    section { padding: 4rem 0; }
+    .section-head { max-width: 700px; margin-bottom: 2rem; }
+    .section-head h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); line-height: 1.1; letter-spacing: -.04em; margin: .55rem 0; }
+    .section-head p { color: var(--muted); margin: 0; }
+    .cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 1.35rem; box-shadow: var(--shadow); }
+    .card .emoji { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 15px; background: var(--surface-2); font-size: 1.4rem; margin-bottom: 1rem; }
+    .card h3 { margin: 0 0 .45rem; font-size: 1.15rem; }
+    .card p { margin: 0; color: var(--muted); }
+    .card .text-link { display: inline-block; margin-top: 1rem; color: var(--accent-2); font-weight: 800; text-decoration: none; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; align-items: start; }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 1.35rem; box-shadow: var(--shadow); min-width: 0; }
+    label { display: block; font-size: .9rem; font-weight: 750; margin: .8rem 0 .35rem; }
+    input, textarea, select {
+      width: 100%; border: 1px solid var(--border); border-radius: 13px; padding: .85rem .9rem;
+      background: var(--bg); color: var(--text); outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+    textarea { resize: vertical; min-height: 100px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+    .hint, .status { color: var(--muted); font-size: .88rem; }
+    .status { min-height: 1.5rem; margin: .65rem 0 0; overflow-wrap: anywhere; }
+    .status.good { color: var(--success); }
+    .status.bad { color: var(--danger); }
+    .translator-output { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 115px; padding: 1rem; border-radius: 14px; border: 1px dashed var(--border); background: var(--bg); margin-top: .8rem; }
+    .chat-head { display: flex; justify-content: space-between; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .auth-actions { display: flex; flex-wrap: wrap; gap: .55rem; }
+    .messages { height: 330px; overflow-y: auto; display: flex; flex-direction: column; gap: .7rem; padding: .8rem; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; margin: 1rem 0; }
+    .message { max-width: 92%; align-self: flex-start; background: var(--surface-2); padding: .65rem .8rem; border-radius: 14px 14px 14px 4px; overflow-wrap: anywhere; }
+    .message.mine { align-self: flex-end; background: color-mix(in srgb, var(--accent) 25%, var(--surface)); border-radius: 14px 14px 4px 14px; }
+    .message strong { display: block; font-size: .82rem; color: var(--accent-2); }
+    .message small { display: block; color: var(--muted); font-size: .72rem; margin-top: .25rem; }
+    .message-body { white-space: pre-wrap; }
+    .chat-form { display: grid; grid-template-columns: 1fr auto; gap: .6rem; }
+    .chat-form input { min-width: 0; }
+    .notice { border: 1px solid var(--border); border-radius: 15px; padding: .9rem; color: var(--muted); font-size: .88rem; background: var(--surface-2); }
+    .contact-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.6rem; border-radius: 24px; background: linear-gradient(120deg, var(--surface-2), var(--surface)); border: 1px solid var(--border); }
+    .contact-strip h3 { margin: 0; font-size: 1.5rem; }
+    .contact-strip p { color: var(--muted); margin: .3rem 0 0; }
+    footer { padding: 2rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .footer-links a { text-decoration: none; }
+    .small-print { font-size: .8rem; color: var(--muted); }
+    @media (max-width: 850px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-card { max-width: 460px; transform: none; }
+      .cards { grid-template-columns: repeat(2,1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .navlinks { display: none; position: absolute; left: 1rem; right: 1rem; top: 72px; padding: 1rem; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); flex-direction: column; align-items: stretch; }
+      .navlinks.open { display: flex; }
+      .navlinks a { padding: .35rem; }
+      .menu-button { display: inline-flex; }
+    }
+    @media (max-width: 540px) {
+      .wrap { width: min(100% - 1.2rem, 1120px); }
+      .hero { padding-top: 3.4rem; }
+      section { padding: 3rem 0; }
+      .cards { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .brand span { font-size: .95rem; }
+      .nav-actions .theme-label { display: none; }
+      .chat-form { grid-template-columns: 1fr; }
+      .messages { height: 290px; }
+      .mini-stats span { font-size: .68rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#home" aria-label="Babel Tech home">
+        <img src="babel-tech-logo.png" alt="Babel Tech logo" id="navLogo">
+        <span class="brand-mark" id="navFallback">BT</span>
+        <span>Babel Tech</span>
+      </a>
+      <nav class="navlinks" id="navLinks" aria-label="Main navigation">
+        <a href="#services">Services</a><a href="#translator">Translator</a><a href="#community">Community</a><a href="#booking">Book us</a><a href="#contact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Switch colour theme">🌙 <span class="theme-label">Theme</span></button>
+        <button class="icon-button menu-button" id="menuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">💜 Technology • Language • Connection</span>
+          <h1>Ideas connect us.<br><span class="gradient">Technology moves us.</span></h1>
+          <p class="lead">Welcome to Babel Tech — a friendly space for technology services, language translation, community and supportive listening. Let’s make things easier, together.</p>
+          <div class="hero-buttons">
+            <a class="button" href="#services">Explore services <span aria-hidden="true">↗</span></a>
+            <a class="button secondary" href="https://wa.me/2349163250794" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+          </div>
+        </div>
+        <aside class="hero-card" aria-label="Babel Tech highlights">
+          <div class="hero-logo">
+            <img src="babel-tech-logo.png" alt="Babel Tech" id="heroLogo">
+            <div class="fallback" id="heroFallback">BT</div>
+          </div>
+          <div class="mini-stats">
+            <div><strong>💻</strong><span>Tech help</span></div>
+            <div><strong>🌍</strong><span>Languages</span></div>
+            <div><strong>💬</strong><span>Community</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">What we do</span>
+          <h2>Useful services, <span class="gradient">one friendly place.</span></h2>
+          <p>Choose what you need, then contact us so we can discuss the details, timing and price before work begins.</p>
+        </div>
+        <div class="cards">
+          <article class="card"><div class="emoji">💻</div><h3>Technology Services</h3><p>Friendly help with digital projects, basic website support, online tools and technology questions.</p><a class="text-link" href="#booking">Ask about tech help →</a></article>
+          <article class="card"><div class="emoji">🌐</div><h3>Translation</h3><p>Language support for everyday text, messages and documents. Important documents may need a certified translator.</p><a class="text-link" href="#translator">Try the translator →</a></article>
+          <article class="card"><div class="emoji">📖</div><h3>Novel & Writing Translation</h3><p>Discuss translation projects for stories, creative writing and other text, with attention to meaning and tone.</p><a class="text-link" href="#booking">Discuss a project →</a></article>
+          <article class="card"><div class="emoji">🤝</div><h3>Friendly Listening</h3><p>A respectful space to talk things through. This is peer-style support, not medical or emergency care.</p><a class="text-link" href="#contact">Get in touch →</a></article>
+          <article class="card"><div class="emoji">👥</div><h3>Community</h3><p>Connect with others in the Babel Tech chat. Please be respectful and protect your private information.</p><a class="text-link" href="#community">Visit the chat →</a></article>
+          <article class="card"><div class="emoji">✨</div><h3>Custom Requests</h3><p>Have a different idea? Send a short message explaining what you need and we can discuss whether it’s a fit.</p><a class="text-link" href="#booking">Tell us about it →</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="translator">
+      <div class="wrap">
+        <div class="section-head"><span class="eyebrow">Language tools</span><h2>Try the <span class="gradient">text translator.</span></h2><p>Translate short text between supported languages. Automated translations can make mistakes, so review important wording.</p></div>
+        <div class="panel">
+          <div class="form-row">
+            <div><label for="sourceLang">Translate from</label><select id="sourceLang">
+              <option value="en">English</option><option value="fr">French</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="de">German</option><option value="it">Italian</option><option value="yo">Yoruba</option><option value="ha">Hausa</option><option value="ig">Igbo</option><option value="ar">Arabic</option><option value="zh-CN">Chinese (Simplified)</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="ru">Russian</option>
+            </select></div>
+            <div><label for="targetLang">Translate to</label><select id="targetLang">
+              <option value="fr">French</option><option value="en" selected>English</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="de">German</option><option value="it">Italian</option><option value="yo">Yoruba</option><option value="ha">Hausa</option><option value="ig">Igbo</option><option value="ar">Arabic</option><option value="zh-CN">Chinese (Simplified)</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="ru">Russian</option>
+            </select></div>
+          </div>
+          <label for="translateInput">Your text</label>
+          <textarea id="translateInput" maxlength="4000" placeholder="Type or paste the text you want to translate…"></textarea>
+          <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.8rem"><button type="button" id="translateBtn">Translate text</button><button type="button" class="secondary" id="swapLangBtn">⇄ Swap languages</button><button type="button" class="secondary" id="clearTranslateBtn">Clear</button></div>
+          <p class="status" id="translateStatus" role="status" aria-live="polite"></p>
+          <label for="translateOutput">Translation</label>
+          <div class="translator-output" id="translateOutput" aria-live="polite">Your translated text will appear here.</div>
+          <p class="small-print">Translation service availability and language coverage can vary. Please do not paste passwords, private information or confidential documents.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="community">
+      <div class="wrap">
+        <div class="section-head"><span class="eyebrow">Meet & connect</span><h2>The Babel Tech <span class="gradient">community chat.</span></h2><p>Sign in with Google to join the conversation. Use a nickname if you prefer not to display your full name.</p></div>
+        <div class="panel">
+          <div class="chat-head">
+            <div><strong id="authStatus">Checking sign-in status…</strong><div class="hint" id="chatHint">Connecting to the community service…</div></div>
+            <div class="auth-actions"><button id="googleSignIn" type="button">🔐 Sign in with Google</button><button id="signOut" class="secondary" type="button" hidden>Sign out</button></div>
+          </div>
+          <div class="form-row">
+            <div><label for="nickname">Display nickname</label><input id="nickname" maxlength="24" placeholder="Choose a nickname"></div>
+            <div><label for="chatFilter">Chat notice</label><div class="notice" id="chatNotice">Be kind. Never share your address, passwords, school details or other private information.</div></div>
+          </div>
+          <div class="messages" id="messages" aria-label="Community messages" aria-live="polite"><p class="hint">Community messages will appear here after the connection is ready.</p></div>
+          <form id="chatForm" class="chat-form">
+            <input id="messageInput" maxlength="500" placeholder="Write a respectful message…" autocomplete="off" aria-label="Message text">
+            <button type="submit" id="sendMessage" disabled>Send message</button>
+          </form>
+          <p class="status" id="chatStatus" role="status" aria-live="polite"></p>
+          <p class="small-print">The community chat is public to signed-in users. Messages may be visible to other members. Do not post sensitive or identifying information. Please report inappropriate content to the site owner.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="booking">
+      <div class="wrap">
+        <div class="section-head"><span class="eyebrow">Let’s work together</span><h2>Tell us what <span class="gradient">you need.</span></h2><p>Fill in the short form to prepare a WhatsApp message. Review it in WhatsApp before sending.</p></div>
+        <div class="two-col">
+          <div class="panel">
+            <form id="bookingForm">
+              <label for="customerName">Your name or nickname</label><input id="customerName" maxlength="70" required placeholder="What should we call you?">
+              <label for="serviceType">Service you’re interested in</label><select id="serviceType" required><option value="">Choose a service</option><option>Technology services</option><option>Translation</option><option>Novel or writing translation</option><option>Friendly listening</option><option>Community enquiry</option><option>Other request</option></select>
+              <label for="requestDetails">A little about your request</label><textarea id="requestDetails" maxlength="1200" required placeholder="Tell us what you need, any deadline, and other useful details."></textarea>
+              <button type="submit" style="margin-top:1rem">Prepare WhatsApp message ↗</button>
+              <p class="status" id="bookingStatus" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+          <div class="panel">
+            <h3>What happens next?</h3>
+            <p class="hint">1. You prepare your enquiry using the form.</p>
+            <p class="hint">2. WhatsApp opens with a draft message.</p>
+            <p class="hint">3. Check the message and send it yourself.</p>
+            <div class="notice" style="margin-top:1rem">A booking is not confirmed until Babel Tech replies and agrees on the details. Please do not send payment or sensitive information before confirming the arrangement.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="contact-strip">
+          <div><h3>Ready to say hello? 💜</h3><p>Reach out with a question or tell us about your idea.</p></div>
+          <a class="button whatsapp" href="https://wa.me/2349163250794" target="_blank" rel="noopener noreferrer">WhatsApp Babel Tech</a>
+        </div>
+        <div class="cards" style="margin-top:1rem">
+          <article class="card"><div class="emoji">📱</div><h3>WhatsApp</h3><p>09163250794</p><a class="text-link" href="https://wa.me/2349163250794" target="_blank" rel="noopener noreferrer">Open WhatsApp →</a></article>
+          <article class="card"><div class="emoji">✉️</div><h3>Email</h3><p>sanyaoludumininu@gmail.com</p><a class="text-link" href="mailto:sanyaoludumininu@gmail.com">Send an email →</a></article>
+          <article class="card"><div class="emoji">🎵</div><h3>TikTok</h3><p>@officialbabeltech</p><a class="text-link" href="https://www.tiktok.com/@officialbabeltech" target="_blank" rel="noopener noreferrer">Visit TikTok →</a></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <div>© <span id="year"></span> Babel Tech. Built with 💜.</div>
+      <div class="footer-links"><a href="#home">Back to top ↑</a><a href="#services">Services</a><a href="#contact">Contact</a></div>
+    </div>
+    <div class="wrap small-print" style="margin-top:.7rem">Babel Tech’s friendly listening service is not a substitute for professional medical, legal or emergency assistance.</div>
+  </footer>
+
+  <!-- Firebase client configuration. Keep database security rules enabled in Firebase Console. -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script>
+    'use strict';
+
+    // Babel Tech Firebase project configuration
+    const firebaseConfig = {
+      apiKey: 'AIzaSyDqa6RNBV_XCtH5YXkBpV9quPBe7Qtnnn4',
+      authDomain: 'babel-tech.firebaseapp.com',
+      databaseURL: 'https://babel-tech-default-rtdb.europe-west1.firebasedatabase.app',
+      projectId: 'babel-tech',
+      storageBucket: 'babel-tech.firebasestorage.app',
+      messagingSenderId: '979174607118',
+      appId: '1:979174607118:web:b8d449e2235d99b866af5f',
+      measurementId: 'G-NXP5V2MZTV'
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const whatsappNumber = '2349163250794';
+    let database = null;
+    let auth = null;
+    let currentUser = null;
+    let messageQuery = null;
+    let messageListener = null;
+    let chatReady = false;
+    let lastSentAt = 0;
+
+    $('year').textContent = new Date().getFullYear();
+
+    // Logo fallback if babel-tech-logo.png is not uploaded beside index.html.
+    function setupLogo(imgId, fallbackId) {
+      const img = $(imgId);
+      const fallback = $(fallbackId);
+      img.addEventListener('error', () => {
+        img.style.display = 'none';
+        fallback.style.display = 'grid';
+      });
+    }
+    setupLogo('navLogo', 'navFallback');
+    setupLogo('heroLogo', 'heroFallback');
+
+    // Mobile navigation
+    $('menuToggle').addEventListener('click', () => {
+      const open = $('navLinks').classList.toggle('open');
+      $('menuToggle').setAttribute('aria-expanded', String(open));
+    });
+    document.querySelectorAll('#navLinks a').forEach(link => link.addEventListener('click', () => {
+      $('navLinks').classList.remove('open');
+      $('menuToggle').setAttribute('aria-expanded', 'false');
+    }));
+
+    // Theme preference
+    const savedTheme = localStorage.getItem('babelTechTheme');
+    if (savedTheme === 'light') document.body.classList.add('light');
+    function updateThemeButton() {
+      $('themeToggle').innerHTML = document.body.classList.contains('light')
+        ? '☀️ <span class="theme-label">Theme</span>'
+        : '🌙 <span class="theme-label">Theme</span>';
+    }
+    updateThemeButton();
+    $('themeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('babelTechTheme', document.body.classList.contains('light') ? 'light' : 'dark');
+      updateThemeButton();
+    });
+
+    // Booking form opens WhatsApp with a prefilled draft. The visitor must send it.
+    $('bookingForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = $('customerName').value.trim();
+      const service = $('serviceType').value;
+      const details = $('requestDetails').value.trim();
+      if (!name || !service || !details) {
+        $('bookingStatus').textContent = 'Please complete all fields.';
+        $('bookingStatus').className = 'status bad';
+        return;
+      }
+      const text = `Hello Babel Tech!%0AName: ${encodeURIComponent(name)}%0AService: ${encodeURIComponent(service)}%0ADetails: ${encodeURIComponent(details)}`;
+      $('bookingStatus').textContent = 'Opening WhatsApp. Please review your draft before sending.';
+      $('bookingStatus').className = 'status good';
+      window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank', 'noopener,noreferrer');
+    });
+
+    // Translator uses the MyMemory translation API; availability and supported languages may vary.
+    $('translateBtn').addEventListener('click', async () => {
+      const source = $('sourceLang').value;
+      const target = $('targetLang').value;
+      const input = $('translateInput').value.trim();
+      const status = $('translateStatus');
+      const output = $('translateOutput');
+      if (!input) {
+        status.textContent = 'Enter some text first.';
+        status.className = 'status bad';
+        return;
+      }
+      if (source === target) {
+        output.textContent = input;
+        status.textContent = 'The source and target languages are the same.';
+        status.className = 'status good';
+        return;
+      }
+      const button = $('translateBtn');
+      button.disabled = true;
+      button.textContent = 'Translating…';
+      status.textContent = 'Connecting to the translation service…';
+      status.className = 'status';
+      output.textContent = '';
+      try {
+        const pair = `${encodeURIComponent(source)}|${encodeURIComponent(target)}`;
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=${pair}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('The translation service is not available right now.');
+        const data = await response.json();
+        if (data.responseStatus && Number(data.responseStatus) !== 200) {
+          throw new Error(data.responseDetails || 'Could not translate this text. Try again later.');
+        }
+        const translated = data.responseData && data.responseData.translatedText;
+        if (!translated) throw new Error('No translation was returned. Try a shorter text or another language.');
+        output.textContent = translated;
+        status.textContent = 'Translation complete. Please check it for accuracy.';
+        status.className = 'status good';
+      } catch (error) {
+        status.textContent = error.message || 'Translation failed. Please try again later.';
+        status.className = 'status bad';
+        output.textContent = 'No translation available yet.';
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Translate text';
+      }
+    });
+    $('swapLangBtn').addEventListener('click', () => {
+      const source = $('sourceLang');
+      const target = $('targetLang');
+      const old = source.value;
+      source.value = target.value;
+      target.value = old;
+    });
+    $('clearTranslateBtn').addEventListener('click', () => {
+      $('translateInput').value = '';
+      $('translateOutput').textContent = 'Your translated text will appear here.';
+      $('translateStatus').textContent = '';
+      $('translateStatus').className = 'status';
+    });
+
+    function setChatStatus(message, type = '') {
+      $('chatStatus').textContent = message;
+      $('chatStatus').className = `status ${type}`.trim();
+    }
+    function showAuthStatus(message) {
+      $('authStatus').textContent = message;
+    }
+    function setChatEnabled(enabled) {
+      $('sendMessage').disabled = !enabled;
+      $('messageInput').disabled = !enabled;
+      $('nickname').disabled = !enabled;
+    }
+    function safeText(value, maxLength = 500) {
+      return typeof value === 'string' ? value.slice(0, maxLength) : '';
+    }
+    function formatTime(value) {
+      if (typeof value !== 'number' || !Number.isFinite(value)) return '';
+      try {
+        return new Date(value).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
+      } catch (_) {
+        return '';
+      }
+    }
+    function addMessage(data, key) {
+      const list = $('messages');
+      const empty = list.querySelector('.hint');
+      if (empty) empty.remove();
+      const item = document.createElement('article');
+      item.className = 'message' + (currentUser && data.uid === currentUser.uid ? ' mine' : '');
+      item.dataset.key = key || '';
+      const name = document.createElement('strong');
+      name.textContent = safeText(data.name || 'Community member', 24);
+      const body = document.createElement('div');
+      body.className = 'message-body';
+      body.textContent = safeText(data.text, 500);
+      const time = document.createElement('small');
+      time.textContent = formatTime(data.createdAt);
+      item.append(name, body, time);
+      list.appendChild(item);
+      while (list.children.length > 50) list.removeChild(list.firstElementChild);
+      list.scrollTop = list.scrollHeight;
+    }
+    function detachMessageListener() {
+      if (messageQuery && messageListener) {
+        messageQuery.off('child_added', messageListener);
+      }
+      messageQuery = null;
+      messageListener = null;
+    }
+    function listenForMessages() {
+      if (!database || !currentUser) return;
+      detachMessageListener();
+      $('messages').replaceChildren();
+      const loading = document.createElement('p');
+      loading.className = 'hint';
+      loading.textContent = 'Loading recent messages…';
+      $('messages').appendChild(loading);
+      messageQuery = database.ref('messages').limitToLast(50);
+      messageListener = snapshot => {
+        const data = snapshot.val();
+        if (data && typeof data === 'object') addMessage(data, snapshot.key);
+      };
+      messageQuery.on('child_added', messageListener, error => {
+        setChatStatus('Could not load messages: ' + (error.message || 'database access denied'), 'bad');
+      });
+      $('chatHint').textContent = 'Showing recent community messages.';
+    }
+
+    // Initialise Firebase carefully so the rest of the page still works if chat is unavailable.
+    try {
+      if (!window.firebase) throw new Error('Firebase scripts did not load. Check your internet connection.');
+      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      database = firebase.database();
+      auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+      $('chatHint').textContent = 'Community service connected. Sign in to participate.';
+      chatReady = true;
+      setChatEnabled(false);
+
+      $('googleSignIn').addEventListener('click', async () => {
+        setChatStatus('');
+        try {
+          const provider = new firebase.auth.GoogleAuthProvider();
+          await auth.signInWithPopup(provider);
+        } catch (error) {
+          let message = error.message || 'Could not sign in.';
+          if (error.code === 'auth/popup-blocked') message = 'Your browser blocked the sign-in pop-up. Allow pop-ups and try again.';
+          if (error.code === 'auth/unauthorized-domain') message = 'This website domain is not authorised in Firebase Authentication settings.';
+          if (error.code === 'auth/operation-not-allowed') message = 'Google sign-in is not enabled in Firebase Authentication.';
+          setChatStatus(message, 'bad');
+        }
+      });
+
+      $('signOut').addEventListener('click', async () => {
+        try {
+          await auth.signOut();
+          setChatStatus('You have signed out.', 'good');
+        } catch (error) {
+          setChatStatus(error.message || 'Could not sign out.', 'bad');
+        }
+      });
+
+      auth.onAuthStateChanged(user => {
+        currentUser = user || null;
+        $('googleSignIn').hidden = !!user;
+        $('signOut').hidden = !user;
+        if (user) {
+          showAuthStatus('Signed in as ' + safeText(user.displayName || user.email || 'community member', 80));
+          const savedNickname = localStorage.getItem('babelTechNickname') || '';
+          $('nickname').value = savedNickname || (user.displayName || '').slice(0, 24);
+          setChatEnabled(true);
+          setChatStatus('You are signed in. Choose a nickname and send a friendly message.', 'good');
+          listenForMessages();
+        } else {
+          showAuthStatus('Not signed in');
+          $('chatHint').textContent = 'Sign in with Google to read and send messages.';
+          setChatEnabled(false);
+          detachMessageListener();
+          $('messages').replaceChildren();
+          const hint = document.createElement('p');
+          hint.className = 'hint';
+          hint.textContent = 'Sign in with Google to load community messages.';
+          $('messages').appendChild(hint);
+        }
+      }, error => {
+        showAuthStatus('Sign-in status unavailable');
+        setChatStatus(error.message || 'Could not check sign-in status.', 'bad');
+      });
+
+      $('chatForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!currentUser || !database) {
+          setChatStatus('Please sign in with Google first.', 'bad');
+          return;
+        }
+        const nickname = $('nickname').value.trim().slice(0, 24);
+        const message = $('messageInput').value.trim().slice(0, 500);
+        if (!nickname) {
+          setChatStatus('Please choose a nickname first.', 'bad');
+          $('nickname').focus();
+          return;
+        }
+        if (!message) {
+          setChatStatus('Type a message first.', 'bad');
+          return;
+        }
+        const now = Date.now();
+        if (now - lastSentAt < 2500) {
+          setChatStatus('Please wait a moment before sending another message.', 'bad');
+          return;
+        }
+        lastSentAt = now;
+        $('sendMessage').disabled = true;
+        try {
+          localStorage.setItem('babelTechNickname', nickname);
+          await database.ref('messages').push({
+            name: nickname,
+            text: message,
+            uid: currentUser.uid,
+            createdAt: firebase.database.ServerValue.TIMESTAMP
+          });
+          $('messageInput').value = '';
+          setChatStatus('Message sent!', 'good');
+        } catch (error) {
+          setChatStatus('Message could not be sent: ' + (error.message || 'check Firebase database rules'), 'bad');
+        } finally {
+          $('sendMessage').disabled = !currentUser;
+        }
+      });
+    } catch (error) {
+      showAuthStatus('Community chat is not connected');
+      $('chatHint').textContent = 'The rest of the website is available, but the chat needs Firebase setup.';
+      setChatStatus(error.message || 'Firebase could not start.', 'bad');
+      setChatEnabled(false);
+      $('googleSignIn').disabled = true;
+    }
+  </script>
+</body>
+</html>
