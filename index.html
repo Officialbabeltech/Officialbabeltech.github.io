@@ -1,3 +1,8 @@
+
+let database = null;
+let currentUser = null;
+let lastMessageTime = 0;
+let messageListener = null;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -902,11 +907,6 @@ const chatName = $('chatName');
 const chatInput = $('chatInput');
 const sendButton = $('sendChat');
 const messagesBox = $('chatMessages');
-
-let database = null;
-let currentUser = null;
-let lastMessageTime = 0;
-let messageListener = null;
 
 function safeValue(value, maxLength = 500) {
   return String(value || '')
